@@ -34,12 +34,48 @@
             gap: 8px;
         }
         
-        .form-group { margin-bottom: 18px; }
+        .form-group { margin-bottom: 20px; }
         .form-group:last-child { margin-bottom: 0; }
-        label { display: block; margin-bottom: 6px; font-weight: 600; color: #334155; font-size: 13.5px; }
-        select, input[type="text"], textarea { width: 100%; padding: 11px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; font-size: 14px; background-color: #fff; }
-        select:focus, input:focus, textarea:focus { outline: none; border-color: #3b82f6; }
+        label.question-label { display: block; margin-bottom: 10px; font-weight: 600; color: #334155; font-size: 13.5px; }
+        input[type="text"], textarea { width: 100%; padding: 11px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; font-size: 14px; background-color: #fff; }
+        input:focus, textarea:focus { outline: none; border-color: #3b82f6; }
         textarea { resize: vertical; height: 90px; }
+
+        /* Estilos modernos para Radio Buttons interactivos tipo tarjeta */
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .radio-option {
+            display: flex;
+            align-items: center;
+            background: #fff;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            padding: 10px 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 13.5px;
+            color: #334155;
+        }
+        .radio-option:hover {
+            background-color: #f1f5f9;
+            border-color: #94a3b8;
+        }
+        .radio-option input[type="radio"] {
+            margin-right: 10px;
+            accent-color: #3b82f6;
+            transform: scale(1.1);
+            cursor: pointer;
+        }
+        /* Clase activa cuando el usuario selecciona la opción */
+        .radio-option.selected {
+            background-color: #eff6ff;
+            border-color: #3b82f6;
+            color: #1e40af;
+            font-weight: 600;
+        }
         
         /* Contenedor de caritas SVG interactivas */
         .rating-container { display: flex; gap: 10px; cursor: pointer; justify-content: space-between; max-width: 360px; }
@@ -54,45 +90,21 @@
             transition: all 0.25s ease;
             flex: 1;
         }
-        .face-option svg {
-            width: 38px;
-            height: 38px;
-            transition: transform 0.2s ease;
-        }
-        .face-option.inactive svg {
-            filter: grayscale(100%);
-            opacity: 0.4;
-        }
-        .face-option:hover, .face-option.active {
-            transform: translateY(-3px);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
-        .face-option:hover svg, .face-option.active svg {
-            filter: grayscale(0%);
-            opacity: 1;
-            transform: scale(1.1);
-        }
-        .face-option[data-value="1"].active, .face-option[data-value="1"]:hover { border-color: #ef4444; background: #fef2f2; }
-        .face-option[data-value="2"].active, .face-option[data-value="2"]:hover { border-color: #f97316; background: #fff7ed; }
-        .face-option[data-value="3"].active, .face-option[data-value="3"]:hover { border-color: #eab308; background: #fefce8; }
-        .face-option[data-value="4"].active, .face-option[data-value="4"]:hover { border-color: #84cc16; background: #f7fee7; }
-        .face-option[data-value="5"].active, .face-option[data-value="5"]:hover { border-color: #10b981; background: #ecfdf5; }
+        .face-option svg { width: 38px; height: 38px; transition: transform 0.2s ease; }
+        .face-option.inactive svg { filter: grayscale(100%); opacity: 0.4; }
+        .face-option:hover, .face-option.active { transform: translateY(-3px); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .face-option:hover svg, .face-option.active svg { filter: grayscale(0%); opacity: 1; transform: scale(1.1); }
+        .face-option[data-value="1"].active { border-color: #ef4444; background: #fef2f2; }
+        .face-option[data-value="2"].active { border-color: #f97316; background: #fff7ed; }
+        .face-option[data-value="3"].active { border-color: #eab308; background: #fefce8; }
+        .face-option[data-value="4"].active { border-color: #84cc16; background: #f7fee7; }
+        .face-option[data-value="5"].active { border-color: #10b981; background: #ecfdf5; }
 
         /* Estilos para la barra de botones de recomendación (0 al 10) */
         .nps-container { display: flex; gap: 4px; justify-content: space-between; flex-wrap: wrap; }
         .nps-btn {
-            flex: 1;
-            min-width: 28px;
-            padding: 9px 0;
-            background-color: #fff;
-            border: 1px solid #cbd5e1;
-            border-radius: 6px;
-            font-weight: 600;
-            color: #334155;
-            cursor: pointer;
-            transition: all 0.2s;
-            text-align: center;
-            font-size: 13px;
+            flex: 1; min-width: 28px; padding: 9px 0; background-color: #fff; border: 1px solid #cbd5e1;
+            border-radius: 6px; font-weight: 600; color: #334155; cursor: pointer; transition: all 0.2s; text-align: center; font-size: 13px;
         }
         .nps-btn:hover { background-color: #e2e8f0; }
         .nps-btn.active { background-color: #3b82f6; color: white; border-color: #2563eb; }
@@ -113,7 +125,7 @@
 
     <form id="survey-form">
         <div class="form-group" style="margin-bottom: 22px;">
-            <label for="cliente-nombre">Nombre y Apellido:</label>
+            <label class="question-label" for="cliente-nombre">Nombre y Apellido:</label>
             <input type="text" id="cliente-nombre" placeholder="Ej. Juan Pérez" required>
         </div>
 
@@ -122,14 +134,13 @@
             <div class="section-title">📞 1. Atención por Soporte Técnico (Remoto / Central)</div>
             
             <div class="form-group">
-                <label for="tiempo-respuesta">¿Cómo califica la rapidez en la atención de su reporte?</label>
-                <select id="tiempo-respuesta" required>
-                    <option value="">Seleccione una opción</option>
-                    <option value="Muy rápido">Muy rápido</option>
-                    <option value="Adecuado">Adecuado / A tiempo</option>
-                    <option value="Lento">Lento</option>
-                    <option value="Muy lento">Muy lento</option>
-                </select>
+                <label class="question-label">¿Cómo califica la rapidez en la atención de su reporte?</label>
+                <div class="radio-group">
+                    <label class="radio-option"><input type="radio" name="tiempoRespuesta" value="Muy rápido" required> Muy rápido</label>
+                    <label class="radio-option"><input type="radio" name="tiempoRespuesta" value="Adecuado"> Adecuado / A tiempo</label>
+                    <label class="radio-option"><input type="radio" name="tiempoRespuesta" value="Lento"> Lento</label>
+                    <label class="radio-option"><input type="radio" name="tiempoRespuesta" value="Muy lento"> Muy lento</label>
+                </div>
             </div>
         </div>
 
@@ -138,7 +149,7 @@
             <div class="section-title">🛠️ 2. Visita Técnica en Domicilio</div>
 
             <div class="form-group">
-                <label>¿Cómo califica la puntualidad y el trato del técnico?</label>
+                <label class="question-label">¿Cómo califica la puntualidad y el trato del técnico?</label>
                 <div class="rating-container" id="rating-faces">
                     <div class="face-option inactive" data-value="1" title="Malo">
                         <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="#EF4444"/><path d="M8 9L10 11M16 9L14 11" stroke="white" stroke-width="2" stroke-linecap="round"/><path d="M9 16C10 14 14 14 15 16" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
@@ -160,42 +171,39 @@
             </div>
 
             <div class="form-group">
-                <label for="problema-resuelto">¿Se brindó solución al inconveniente reportado?</label>
-                <select id="problema-resuelto" required>
-                    <option value="">Seleccione una opción</option>
-                    <option value="Si">Sí, totalmente solucionado</option>
-                    <option value="Parcial">Parcialmente solucionado</option>
-                    <option value="No">No se solucionó</option>
-                </select>
+                <label class="question-label">¿Se brindó solución al inconveniente reportado?</label>
+                <div class="radio-group">
+                    <label class="radio-option"><input type="radio" name="problemaResuelto" value="Si" required> Sí, totalmente solucionado</label>
+                    <label class="radio-option"><input type="radio" name="problemaResuelto" value="Parcial"> Parcialmente solucionado</label>
+                    <label class="radio-option"><input type="radio" name="problemaResuelto" value="No"> No se solucionó</label>
+                </div>
             </div>
 
             <div class="form-group">
-                <label for="limpieza-orden">¿El técnico dejó el área de trabajo limpia y ordenada?</label>
-                <select id="limpieza-orden" required>
-                    <option value="">Seleccione una opción</option>
-                    <option value="Sí, completamente ordenado">Sí, completamente ordenado</option>
-                    <option value="Más o menos">Más o menos</option>
-                    <option value="No, dejó desordenado">No, dejó desordenado</option>
-                </select>
+                <label class="question-label">¿El técnico dejó el área de trabajo limpia y ordenada?</label>
+                <div class="radio-group">
+                    <label class="radio-option"><input type="radio" name="limpiezaOrden" value="Sí, completamente ordenado" required> Sí, completamente ordenado</label>
+                    <label class="radio-option"><input type="radio" name="limpiezaOrden" value="Más o menos"> Más o menos</label>
+                    <label class="radio-option"><input type="radio" name="limpiezaOrden" value="No, dejó desordenado"> No, dejó desordenado</label>
+                </div>
             </div>
 
             <div class="form-group">
-                <label for="explicacion-problema">¿El técnico le explicó claramente el origen del problema y la solución?</label>
-                <select id="explicacion-problema" required>
-                    <option value="">Seleccione una opción</option>
-                    <option value="Sí, muy claro">Sí, muy claro</option>
-                    <option value="Parcialmente">Parcialmente</option>
-                    <option value="No explicó nada">No explicó nada</option>
-                </select>
+                <label class="question-label">¿El técnico le explicó claramente el origen del problema y la solución?</label>
+                <div class="radio-group">
+                    <label class="radio-option"><input type="radio" name="explicacionProblema" value="Sí, muy claro" required> Sí, muy claro</label>
+                    <label class="radio-option"><input type="radio" name="explicacionProblema" value="Parcialmente"> Parcialmente</label>
+                    <label class="radio-option"><input type="radio" name="explicacionProblema" value="No explicó nada"> No explicó nada</label>
+                </div>
             </div>
         </div>
 
-        <!-- SECCIÓN 3: EVALUACIÓN GENERAL Y COMENTARIOS -->
+        <!-- SECCIÓN 3: VALORACIÓN GENERAL -->
         <div class="section-card">
             <div class="section-title">⭐ 3. Valoración General</div>
 
             <div class="form-group">
-                <label>¿Recomendaría nuestros servicios de internet/soporte?</label>
+                <label class="question-label">¿Recomendaría nuestros servicios de internet/soporte?</label>
                 <div class="nps-container" id="nps-rating">
                     <button type="button" class="nps-btn" data-value="0">0</button>
                     <button type="button" class="nps-btn" data-value="1">1</button>
@@ -213,7 +221,7 @@
             </div>
 
             <div class="form-group" style="margin-top: 15px;">
-                <label for="comentarios">Comentarios u observaciones adicionales:</label>
+                <label class="question-label" for="comentarios">Comentarios u observaciones adicionales:</label>
                 <textarea id="comentarios" placeholder="Escribe aquí si tienes algún detalle adicional que reportar..."></textarea>
             </div>
         </div>
@@ -243,6 +251,21 @@
     const btnDashboard = document.getElementById('btn-dashboard');
     const surveyForm = document.getElementById('survey-form');
     
+    // Interactividad avanzada para las tarjetas de radio buttons
+    document.querySelectorAll('.radio-group').forEach(group => {
+        const options = group.querySelectorAll('.radio-option');
+        options.forEach(opt => {
+            const radio = opt.querySelector('input[type="radio"]');
+            
+            // Marcar visualmente al hacer clic en toda la tarjeta
+            opt.addEventListener('click', () => {
+                radio.checked = true;
+                options.forEach(o => o.classList.remove('selected'));
+                opt.classList.add('selected');
+            });
+        });
+    });
+
     const faceOptions = document.querySelectorAll('.face-option');
     const hiddenInputFace = document.getElementById('trato-tecnico-val');
 
@@ -303,11 +326,11 @@
 
         const dataEncuesta = {
             clienteNombre: document.getElementById('cliente-nombre').value,
-            tiempoRespuesta: document.getElementById('tiempo-respuesta').value,
+            tiempoRespuesta: document.querySelector('input[name="tiempoRespuesta"]:checked')?.value || "",
             tratoTecnicoCaritas: parseInt(hiddenInputFace.value),
-            problemaResuelto: document.getElementById('problema-resuelto').value,
-            limpiezaOrden: document.getElementById('limpieza-orden').value,
-            explicacionProblema: document.getElementById('explicacion-problema').value,
+            problemaResuelto: document.querySelector('input[name="problemaResuelto"]:checked')?.value || "",
+            limpiezaOrden: document.querySelector('input[name="limpiezaOrden"]:checked')?.value || "",
+            explicacionProblema: document.querySelector('input[name="explicacionProblema"]:checked')?.value || "",
             recomendaria: parseInt(hiddenInputNps.value),
             comentarios: document.getElementById('comentarios').value,
             fechaCreacion: new Date()
@@ -321,6 +344,7 @@
             hiddenInputNps.value = "";
             highlightFaces(0);
             npsButtons.forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.radio-option').forEach(o => o.classList.remove('selected'));
         } catch (error) {
             console.error("Error al guardar en Firebase: ", error);
             alert("Ocurrió un error al enviar el formulario. Inténtalo de nuevo.");
