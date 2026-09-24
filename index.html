@@ -90,7 +90,6 @@
     <p class="subtitle">Tu opinión es fundamental para asegurarnos de brindarte un servicio óptimo en WINTV.</p>
 
     <form id="survey-form">
-        <!-- Cambio: De número de ticket a Nombre del cliente -->
         <div class="form-group">
             <label for="cliente-nombre">Nombre y Apellido:</label>
             <input type="text" id="cliente-nombre" placeholder="Ej. Juan Pérez" required>
@@ -128,16 +127,18 @@
             </select>
         </div>
 
+        <!-- Cambio: Reemplazado por la valoración del trato o profesionalismo del técnico -->
         <div class="form-group">
-            <label for="sigue-fallando">¿Sigue presentando el mismo inconveniente?</label>
-            <select id="sigue-fallando" required>
+            <label for="trato-amabilidad">¿Cómo calificaría el profesionalismo y amabilidad del técnico?</label>
+            <select id="trato-amabilidad" required>
                 <option value="">Seleccione una opción</option>
-                <option value="Si">Sí, persiste la falla</option>
-                <option value="No">No, ya funciona correctamente</option>
+                <option value="Excelente">Excelente</option>
+                <option value="Bueno">Bueno</option>
+                <option value="Regular">Regular</option>
+                <option value="Malo">Malo</option>
             </select>
         </div>
 
-        <!-- Cambio: De List Box a Botones Interactivos del 0 al 10 -->
         <div class="form-group">
             <label>¿Recomendaría nuestros servicios de internet/soporte?</label>
             <div class="nps-container" id="nps-rating">
@@ -186,7 +187,6 @@
     const btnDashboard = document.getElementById('btn-dashboard');
     const surveyForm = document.getElementById('survey-form');
     
-    // Lógica para las caritas SVG
     const faceOptions = document.querySelectorAll('.face-option');
     const hiddenInputFace = document.getElementById('trato-tecnico-val');
 
@@ -218,7 +218,6 @@
         });
     }
 
-    // Lógica para los botones interactivos del 0 al 10 (NPS)
     const npsButtons = document.querySelectorAll('.nps-btn');
     const hiddenInputNps = document.getElementById('recomendaria-val');
 
@@ -230,7 +229,6 @@
         });
     });
 
-    // Validación de rol administrador para mostrar el botón del dashboard
     onAuthStateChanged(auth, async (user) => {
         if (user) {
             try {
@@ -244,15 +242,14 @@
         }
     });
 
-    // Envío de la encuesta a Firestore
     surveyForm.addEventListener('submit', async (e) => {
         e.preventDefault();
 
         const dataEncuesta = {
             clienteNombre: document.getElementById('cliente-nombre').value,
-            tratoTecnico: parseInt(hiddenInputFace.value),
+            tratoTecnicoCaritas: parseInt(hiddenInputFace.value),
             problemaResuelto: document.getElementById('problema-resuelto').value,
-            sigueFallando: document.getElementById('sigue-fallando').value,
+            tratoAmabilidadSelect: document.getElementById('trato-amabilidad').value,
             recomendaria: parseInt(hiddenInputNps.value),
             comentarios: document.getElementById('comentarios').value,
             fechaCreacion: new Date()
