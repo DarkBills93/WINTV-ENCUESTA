@@ -38,17 +38,10 @@
             height: 42px;
             transition: transform 0.2s ease;
         }
-        
-        /* Estados inactivos / grises */
-        .face-option svg path, .face-option svg circle {
-            transition: fill 0.2s ease, stroke 0.2s ease;
-        }
         .face-option.inactive svg {
             filter: grayscale(100%);
             opacity: 0.4;
         }
-
-        /* Estados activos / hover con colores personalizados por nivel */
         .face-option:hover, .face-option.active {
             transform: translateY(-4px);
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
@@ -58,15 +51,31 @@
             opacity: 1;
             transform: scale(1.1);
         }
-
-        /* Colores específicos cuando se seleccionan */
         .face-option[data-value="1"].active, .face-option[data-value="1"]:hover { border-color: #ef4444; background: #fef2f2; }
         .face-option[data-value="2"].active, .face-option[data-value="2"]:hover { border-color: #f97316; background: #fff7ed; }
         .face-option[data-value="3"].active, .face-option[data-value="3"]:hover { border-color: #eab308; background: #fefce8; }
         .face-option[data-value="4"].active, .face-option[data-value="4"]:hover { border-color: #84cc16; background: #f7fee7; }
         .face-option[data-value="5"].active, .face-option[data-value="5"]:hover { border-color: #10b981; background: #ecfdf5; }
 
-        button[type="submit"] { background-color: #10b981; color: white; border: none; padding: 14px; width: 100%; border-radius: 6px; font-size: 16px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+        /* Estilos para la barra de botones de recomendación (0 al 10) */
+        .nps-container { display: flex; gap: 4px; justify-content: space-between; flex-wrap: wrap; }
+        .nps-btn {
+            flex: 1;
+            min-width: 32px;
+            padding: 10px 0;
+            background-color: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-weight: 600;
+            color: #334155;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+        .nps-btn:hover { background-color: #e2e8f0; }
+        .nps-btn.active { background-color: #3b82f6; color: white; border-color: #2563eb; }
+
+        button[type="submit"] { background-color: #10b981; color: white; border: none; padding: 14px; width: 100%; border-radius: 6px; font-size: 16px; font-weight: 600; cursor: pointer; transition: background 0.2s; margin-top: 10px; }
         button[type="submit"]:hover { background-color: #059669; }
     </style>
 </head>
@@ -81,58 +90,29 @@
     <p class="subtitle">Tu opinión es fundamental para asegurarnos de brindarte un servicio óptimo en WINTV.</p>
 
     <form id="survey-form">
+        <!-- Cambio: De número de ticket a Nombre del cliente -->
         <div class="form-group">
-            <label for="ticket-id">N° de Ticket / Código de Avería:</label>
-            <input type="text" id="ticket-id" placeholder="Ej. TCK-2026-8912" required>
+            <label for="cliente-nombre">Nombre y Apellido:</label>
+            <input type="text" id="cliente-nombre" placeholder="Ej. Juan Pérez" required>
         </div>
 
         <div class="form-group">
             <label>¿Cómo califica la puntualidad y el trato del técnico?</label>
             <div class="rating-container" id="rating-faces">
-                <!-- 1: Malo (Molesto/Triste) -->
                 <div class="face-option inactive" data-value="1" title="Malo">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="12" cy="12" r="10" fill="#EF4444"/>
-                        <path d="M8 9L10 11M16 9L14 11" stroke="white" stroke-width="2" stroke-linecap="round"/>
-                        <path d="M9 16C10 14 14 14 15 16" stroke="white" stroke-width="2" stroke-linecap="round"/>
-                    </svg>
+                    <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="#EF4444"/><path d="M8 9L10 11M16 9L14 11" stroke="white" stroke-width="2" stroke-linecap="round"/><path d="M9 16C10 14 14 14 15 16" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
                 </div>
-                <!-- 2: Regular -->
                 <div class="face-option inactive" data-value="2" title="Regular">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="12" cy="12" r="10" fill="#F97316"/>
-                        <circle cx="9" cy="10" r="1.5" fill="white"/>
-                        <circle cx="15" cy="10" r="1.5" fill="white"/>
-                        <path d="M9 15H15" stroke="white" stroke-width="2" stroke-linecap="round"/>
-                    </svg>
+                    <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="#F97316"/><circle cx="9" cy="10" r="1.5" fill="white"/><circle cx="15" cy="10" r="1.5" fill="white"/><path d="M9 15H15" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
                 </div>
-                <!-- 3: Bueno -->
                 <div class="face-option inactive" data-value="3" title="Bueno">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="12" cy="12" r="10" fill="#EAB308"/>
-                        <circle cx="9" cy="10" r="1.5" fill="white"/>
-                        <circle cx="15" cy="10" r="1.5" fill="white"/>
-                        <line x1="9" y1="15" x2="15" y2="15" stroke="white" stroke-width="2" stroke-linecap="round"/>
-                    </svg>
+                    <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="#EAB308"/><circle cx="9" cy="10" r="1.5" fill="white"/><circle cx="15" cy="10" r="1.5" fill="white"/><line x1="9" y1="15" x2="15" y2="15" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
                 </div>
-                <!-- 4: Muy Bueno -->
                 <div class="face-option inactive" data-value="4" title="Muy Bueno">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="12" cy="12" r="10" fill="#84CC16"/>
-                        <circle cx="9" cy="10" r="1.5" fill="white"/>
-                        <circle cx="15" cy="10" r="1.5" fill="white"/>
-                        <path d="M8 14C9.5 16 14.5 16 16 14" stroke="white" stroke-width="2" stroke-linecap="round"/>
-                    </svg>
+                    <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="#84CC16"/><circle cx="9" cy="10" r="1.5" fill="white"/><circle cx="15" cy="10" r="1.5" fill="white"/><path d="M8 14C9.5 16 14.5 16 16 14" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
                 </div>
-                <!-- 5: Excelente (Súper Feliz con brillo) -->
                 <div class="face-option inactive" data-value="5" title="¡Excelente!">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="12" cy="12" r="10" fill="#10B981"/>
-                        <path d="M8 9L9.5 10.5M16 9L14.5 10.5" stroke="white" stroke-width="2" stroke-linecap="round"/>
-                        <circle cx="9" cy="9" r="0.5" fill="white"/>
-                        <circle cx="15" cy="9" r="0.5" fill="white"/>
-                        <path d="M7 13C8.5 16 15.5 16 17 13" stroke="white" stroke-width="2" stroke-linecap="round"/>
-                    </svg>
+                    <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="#10B981"/><path d="M8 9L9.5 10.5M16 9L14.5 10.5" stroke="white" stroke-width="2" stroke-linecap="round"/><circle cx="9" cy="9" r="0.5" fill="white"/><circle cx="15" cy="9" r="0.5" fill="white"/><path d="M7 13C8.5 16 15.5 16 17 13" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
                 </div>
             </div>
             <input type="hidden" id="trato-tecnico-val" required>
@@ -157,22 +137,23 @@
             </select>
         </div>
 
+        <!-- Cambio: De List Box a Botones Interactivos del 0 al 10 -->
         <div class="form-group">
-            <label for="recomendaria">¿Recomendaría nuestros servicios de internet/soporte?</label>
-            <select id="recomendaria" required>
-                <option value="">Seleccione una puntuación (0 al 10)</option>
-                <option value="10">10 - Definitivamente sí</option>
-                <option value="9">9</option>
-                <option value="8">8</option>
-                <option value="7">7</option>
-                <option value="6">6</option>
-                <option value="5">5 - Neutral</option>
-                <option value="4">4</option>
-                <option value="3">3</option>
-                <option value="2">2</option>
-                <option value="1">1</option>
-                <option value="0">0 - Definitivamente no</option>
-            </select>
+            <label>¿Recomendaría nuestros servicios de internet/soporte?</label>
+            <div class="nps-container" id="nps-rating">
+                <button type="button" class="nps-btn" data-value="0">0</button>
+                <button type="button" class="nps-btn" data-value="1">1</button>
+                <button type="button" class="nps-btn" data-value="2">2</button>
+                <button type="button" class="nps-btn" data-value="3">3</button>
+                <button type="button" class="nps-btn" data-value="4">4</button>
+                <button type="button" class="nps-btn" data-value="5">5</button>
+                <button type="button" class="nps-btn" data-value="6">6</button>
+                <button type="button" class="nps-btn" data-value="7">7</button>
+                <button type="button" class="nps-btn" data-value="8">8</button>
+                <button type="button" class="nps-btn" data-value="9">9</button>
+                <button type="button" class="nps-btn" data-value="10">10</button>
+            </div>
+            <input type="hidden" id="recomendaria-val" required>
         </div>
 
         <div class="form-group">
@@ -205,9 +186,9 @@
     const btnDashboard = document.getElementById('btn-dashboard');
     const surveyForm = document.getElementById('survey-form');
     
-    // Interactividad personalizada para las caritas SVG
+    // Lógica para las caritas SVG
     const faceOptions = document.querySelectorAll('.face-option');
-    const hiddenInput = document.getElementById('trato-tecnico-val');
+    const hiddenInputFace = document.getElementById('trato-tecnico-val');
 
     faceOptions.forEach(option => {
         option.addEventListener('mouseenter', () => {
@@ -215,12 +196,12 @@
         });
 
         document.getElementById('rating-faces').addEventListener('mouseleave', () => {
-            highlightFaces(hiddenInput.value);
+            highlightFaces(hiddenInputFace.value);
         });
 
         option.addEventListener('click', () => {
             const val = option.getAttribute('data-value');
-            hiddenInput.value = val;
+            hiddenInputFace.value = val;
             highlightFaces(val);
         });
     });
@@ -236,6 +217,18 @@
             }
         });
     }
+
+    // Lógica para los botones interactivos del 0 al 10 (NPS)
+    const npsButtons = document.querySelectorAll('.nps-btn');
+    const hiddenInputNps = document.getElementById('recomendaria-val');
+
+    npsButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            npsButtons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            hiddenInputNps.value = btn.getAttribute('data-value');
+        });
+    });
 
     // Validación de rol administrador para mostrar el botón del dashboard
     onAuthStateChanged(auth, async (user) => {
@@ -256,11 +249,11 @@
         e.preventDefault();
 
         const dataEncuesta = {
-            ticketId: document.getElementById('ticket-id').value,
-            tratoTecnico: parseInt(hiddenInput.value),
+            clienteNombre: document.getElementById('cliente-nombre').value,
+            tratoTecnico: parseInt(hiddenInputFace.value),
             problemaResuelto: document.getElementById('problema-resuelto').value,
             sigueFallando: document.getElementById('sigue-fallando').value,
-            recomendaria: parseInt(document.getElementById('recomendaria').value),
+            recomendaria: parseInt(hiddenInputNps.value),
             comentarios: document.getElementById('comentarios').value,
             fechaCreacion: new Date()
         };
@@ -269,8 +262,10 @@
             await addDoc(collection(db, "encuestas_soporte"), dataEncuesta);
             alert("¡Muchas gracias! Tu respuesta ha sido registrada exitosamente.");
             surveyForm.reset();
-            hiddenInput.value = "";
+            hiddenInputFace.value = "";
+            hiddenInputNps.value = "";
             highlightFaces(0);
+            npsButtons.forEach(b => b.classList.remove('active'));
         } catch (error) {
             console.error("Error al guardar en Firebase: ", error);
             alert("Ocurrió un error al enviar el formulario. Inténtalo de nuevo.");
