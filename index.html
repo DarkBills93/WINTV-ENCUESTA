@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evaluación de Soporte Técnico | WINTV</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f5; margin: 0; padding: 20px; }
+        .container { max-width: 600px; background: white; padding: 35px; border-radius: 12px; box-shadow: 0 6px 20px rgba(0,0,0,0.08); margin: auto; }
+        .admin-bar { text-align: right; margin-bottom: 15px; }
+        .admin-bar button { background-color: #1e293b; color: white; border: none; padding: 8px 14px; border-radius: 6px; font-size: 14px; cursor: pointer; display: none; transition: background 0.2s; }
+        .admin-bar button:hover { background-color: #0f172a; }
+        
+        h2 { color: #1e293b; margin-top: 0; }
+        p.subtitle { color: #64748b; font-size: 14px; margin-bottom: 25px; }
+        
+        .form-group { margin-bottom: 22px; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; color: #334155; font-size: 14px; }
+        select, input[type="text"], textarea { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; font-size: 14px; background-color: #f8fafc; }
+        select:focus, input:focus, textarea:focus { outline: none; border-color: #3b82f6; background-color: #fff; }
+        textarea { resize: vertical; height: 100px; }
+        
+        /* Contenedor de caritas SVG interactivas */
+        .rating-container { display: flex; gap: 12px; cursor: pointer; justify-content: space-between; max-width: 360px; }
+        .face-option {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: all 0.25s ease;
+            flex: 1;
+        }
+        .face-option svg {
+            width: 42px;
+            height: 42px;
+            transition: transform 0.2s ease;
+        }
+        
+        /* Estados inactivos / grises */
+        .face-option svg path, .face-option svg circle {
+            transition: fill 0.2s ease, stroke 0.2s ease;
+        }
+        .face-option.inactive svg {
+            filter: grayscale(100%);
+            opacity: 0.4;
+        }
+
+        /* Estados activos / hover con colores personalizados por nivel */
+        .face-option:hover, .face-option.active {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .face-option:hover svg, .face-option.active svg {
+            filter: grayscale(0%);
+            opacity: 1;
+            transform: scale(1.1);
+        }
+
+        /* Colores específicos cuando se seleccionan */
+        .face-option[data-value="1"].active, .face-option[data-value="1"]:hover { border-color: #ef4444; background: #fef2f2; }
+        .face-option[data-value="2"].active, .face-option[data-value="2"]:hover { border-color: #f97316; background: #fff7ed; }
+        .face-option[data-value="3"].active, .face-option[data-value="3"]:hover { border-color: #eab308; background: #fefce8; }
+        .face-option[data-value="4"].active, .face-option[data-value="4"]:hover { border-color: #84cc16; background: #f7fee7; }
+        .face-option[data-value="5"].active, .face-option[data-value="5"]:hover { border-color: #10b981; background: #ecfdf5; }
+
+        button[type="submit"] { background-color: #10b981; color: white; border: none; padding: 14px; width: 100%; border-radius: 6px; font-size: 16px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+        button[type="submit"]:hover { background-color: #059669; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="admin-bar">
+        <button id="btn-dashboard">📊 Ir al Dashboard</button>
+    </div>
+
+    <h2>Califica tu Visita o Soporte Técnico</h2>
+    <p class="subtitle">Tu opinión es fundamental para asegurarnos de brindarte un servicio óptimo en WINTV.</p>
+
+    <form id="survey-form">
+        <div class="form-group">
+            <label for="ticket-id">N° de Ticket / Código de Avería:</label>
+            <input type="text" id="ticket-id" placeholder="Ej. TCK-2026-8912" required>
+        </div>
+
+        <div class="form-group">
+            <label>¿Cómo califica la puntualidad y el trato del técnico?</label>
+            <div class="rating-container" id="rating-faces">
+                <!-- 1: Malo (Molesto/Triste) -->
+                <div class="face-option inactive" data-value="1" title="Malo">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="12" r="10" fill="#EF4444"/>
+                        <path d="M8 9L10 11M16 9L14 11" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M9 16C10 14 14 14 15 16" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <!-- 2: Regular -->
+                <div class="face-option inactive" data-value="2" title="Regular">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="12" r="10" fill="#F97316"/>
+                        <circle cx="9" cy="10" r="1.5" fill="white"/>
+                        <circle cx="15" cy="10" r="1.5" fill="white"/>
+                        <path d="M9 15H15" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <!-- 3: Bueno -->
+                <div class="face-option inactive" data-value="3" title="Bueno">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="12" r="10" fill="#EAB308"/>
+                        <circle cx="9" cy="10" r="1.5" fill="white"/>
+                        <circle cx="15" cy="10" r="1.5" fill="white"/>
+                        <line x1="9" y1="15" x2="15" y2="15" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <!-- 4: Muy Bueno -->
+                <div class="face-option inactive" data-value="4" title="Muy Bueno">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="12" r="10" fill="#84CC16"/>
+                        <circle cx="9" cy="10" r="1.5" fill="white"/>
+                        <circle cx="15" cy="10" r="1.5" fill="white"/>
+                        <path d="M8 14C9.5 16 14.5 16 16 14" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <!-- 5: Excelente (Súper Feliz con brillo) -->
+                <div class="face-option inactive" data-value="5" title="¡Excelente!">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="12" r="10" fill="#10B981"/>
+                        <path d="M8 9L9.5 10.5M16 9L14.5 10.5" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                        <circle cx="9" cy="9" r="0.5" fill="white"/>
+                        <circle cx="15" cy="9" r="0.5" fill="white"/>
+                        <path d="M7 13C8.5 16 15.5 16 17 13" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </div>
+            </div>
+            <input type="hidden" id="trato-tecnico-val" required>
+        </div>
+
+        <div class="form-group">
+            <label for="problema-resuelto">¿Se brindó solución al inconveniente reportado?</label>
+            <select id="problema-resuelto" required>
+                <option value="">Seleccione una opción</option>
+                <option value="Si">Sí, totalmente solucionado</option>
+                <option value="Parcial">Parcialmente solucionado</option>
+                <option value="No">No se solucionó</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="sigue-fallando">¿Sigue presentando el mismo inconveniente?</label>
+            <select id="sigue-fallando" required>
+                <option value="">Seleccione una opción</option>
+                <option value="Si">Sí, persiste la falla</option>
+                <option value="No">No, ya funciona correctamente</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="recomendaria">¿Recomendaría nuestros servicios de internet/soporte?</label>
+            <select id="recomendaria" required>
+                <option value="">Seleccione una puntuación (0 al 10)</option>
+                <option value="10">10 - Definitivamente sí</option>
+                <option value="9">9</option>
+                <option value="8">8</option>
+                <option value="7">7</option>
+                <option value="6">6</option>
+                <option value="5">5 - Neutral</option>
+                <option value="4">4</option>
+                <option value="3">3</option>
+                <option value="2">2</option>
+                <option value="1">1</option>
+                <option value="0">0 - Definitivamente no</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="comentarios">Comentarios u observaciones adicionales:</label>
+            <textarea id="comentarios" placeholder="Escribe aquí si tienes algún detalle adicional que reportar..."></textarea>
+        </div>
+
+        <button type="submit">Enviar Evaluación</button>
+    </form>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { getFirestore, collection, addDoc, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "TU_API_KEY",
+        authDomain: "TU_AUTH_DOMAIN",
+        projectId: "TU_PROJECT_ID",
+        storageBucket: "TU_STORAGE_BUCKET",
+        messagingSenderId: "TU_MESSAGING_SENDER_ID",
+        appId: "TU_APP_ID"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const btnDashboard = document.getElementById('btn-dashboard');
+    const surveyForm = document.getElementById('survey-form');
+    
+    // Interactividad personalizada para las caritas SVG
+    const faceOptions = document.querySelectorAll('.face-option');
+    const hiddenInput = document.getElementById('trato-tecnico-val');
+
+    faceOptions.forEach(option => {
+        option.addEventListener('mouseenter', () => {
+            highlightFaces(option.getAttribute('data-value'));
+        });
+
+        document.getElementById('rating-faces').addEventListener('mouseleave', () => {
+            highlightFaces(hiddenInput.value);
+        });
+
+        option.addEventListener('click', () => {
+            const val = option.getAttribute('data-value');
+            hiddenInput.value = val;
+            highlightFaces(val);
+        });
+    });
+
+    function highlightFaces(count) {
+        faceOptions.forEach(opt => {
+            if (count && opt.getAttribute('data-value') <= count) {
+                opt.classList.add('active');
+                opt.classList.remove('inactive');
+            } else {
+                opt.classList.remove('active');
+                opt.classList.add('inactive');
+            }
+        });
+    }
+
+    // Validación de rol administrador para mostrar el botón del dashboard
+    onAuthStateChanged(auth, async (user) => {
+        if (user) {
+            try {
+                const userDoc = await getDoc(doc(db, "users", user.uid));
+                if (userDoc.exists() && userDoc.data().role === "admin") {
+                    btnDashboard.style.display = "inline-block";
+                }
+            } catch (error) {
+                console.error("Error al verificar privilegios:", error);
+            }
+        }
+    });
+
+    // Envío de la encuesta a Firestore
+    surveyForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const dataEncuesta = {
+            ticketId: document.getElementById('ticket-id').value,
+            tratoTecnico: parseInt(hiddenInput.value),
+            problemaResuelto: document.getElementById('problema-resuelto').value,
+            sigueFallando: document.getElementById('sigue-fallando').value,
+            recomendaria: parseInt(document.getElementById('recomendaria').value),
+            comentarios: document.getElementById('comentarios').value,
+            fechaCreacion: new Date()
+        };
+
+        try {
+            await addDoc(collection(db, "encuestas_soporte"), dataEncuesta);
+            alert("¡Muchas gracias! Tu respuesta ha sido registrada exitosamente.");
+            surveyForm.reset();
+            hiddenInput.value = "";
+            highlightFaces(0);
+        } catch (error) {
+            console.error("Error al guardar en Firebase: ", error);
+            alert("Ocurrió un error al enviar el formulario. Inténtalo de nuevo.");
+        }
+    });
+
+    btnDashboard.addEventListener('click', () => {
+        window.location.href = "dashboard.html";
+    });
+</script>
+
+</body>
+</html>
